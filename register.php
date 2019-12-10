@@ -6,7 +6,7 @@
     if(!isset($_POST['newUser'], $_POST['newPswd'], $_POST['newMail'])) {
         // If it isn't show this
         die("Please complete the registration form!")
-    };
+    }
 
     // Make sure the submitted values are not empty
     if(empty($_POST['newUser']) || empty($_POST['newPswd']) || empty($_POST['newMail'])) {

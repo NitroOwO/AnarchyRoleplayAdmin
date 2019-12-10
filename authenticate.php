@@ -10,7 +10,7 @@ if(!isset($_POST['adminUser'], $_POST['adminPswd'])) {
 }
 
 // Prepare SQL, preparing statement will prevent SQL injection
-if($stmt = $link->prepare('SELECT id, password FROM staffaccounts WHERE username = ?')) {
+if($stmt = $link->prepare('SELECT id, password, stafflevel FROM staffaccounts WHERE username = ?')) {
     // Bind parameters
     $stmt->bind_param('s', $_POST['adminUser']);
     $stmt->execute();
@@ -18,7 +18,7 @@ if($stmt = $link->prepare('SELECT id, password FROM staffaccounts WHERE username
     $stmt->store_result();
 
     if ($stmt->num_rows > 0) {
-        $stmt->bind_result($id, $password);
+        $stmt->bind_result($id, $password, $stafflevel);
         $stmt->fetch();
         // Account exists, now verify password
         if(password_verify($_POST['adminPswd'], $password)) {
@@ -27,6 +27,7 @@ if($stmt = $link->prepare('SELECT id, password FROM staffaccounts WHERE username
             $_SESSION['loggedin'] = TRUE;
             $_SESSION['name'] = $_POST['adminUser'];
             $_SESSION['id'] = $id;
+            $_SESSION['stafflevel'] = $stafflevel;
             header('Location: admin.php');
         } else {
             echo "Incorrect password!";

@@ -6,17 +6,12 @@
         header('location: index.php');
         exit();
     }
+
     // Connect to database
     include_once 'php/config.php';
 
-    // Store password and email in session
-    $stmt = $link->prepare('SELECT password, email FROM staffaccounts WHERE id = ?');
-    // Get account info from ID
-    $stmt->bind_param('i', $_SESSION['id']);
-    $stmt->execute();
-    $stmt->bind_result($password, $email);
-    $stmt->fetch();
-    $stmt->close();
+    // Result for table
+    $result = mysqli_query($link, "SELECT * FROM supportcases");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -31,7 +26,7 @@
     <link rel="stylesheet" href="css/custom.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 </head>
-<body style="background-color: #ECEEEF; background-repeat: no-repeat; background-attachment: fixed; background-size: cover;" class="loggedin">
+<body style="background-color: #ECEEEF; background-repeat: no-repeat; background-attachment: fixed; background-size: cover;">
 
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light">
@@ -55,31 +50,44 @@
             </div>
         </div>  
     </nav>
+    
+    <div class="container-fluid">
+    <h1 class="text-center">Anarchy Roleplay Cases</h1>
+    <!-- Table with cases -->
+    <table class="table" style="margin-top:30px;">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Username</th>
+                <th>Steam ID</th>
+                <th>Discord</th>
+                <th>Punishment</th>
+                <th>Subject</th>
+                <th>Staff Member</th>
+                <th>Reason</th>
+                <th>Evidence</th>
+                <th>View / Edit</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php while($row = mysqli_fetch_array($result)) { ?>
+            <tr>
+                <td><?php echo $row['id']; ?></td>
+                <td><?php echo $row['username']; ?></td>
+                <td><?php echo $row['steamid']; ?></td>
+                <td><?php echo $row['discord']; ?></td>
+                <td><?php echo $row['punishment']; ?></td>
+                <td><?php echo $row['casesubject']; ?></td>
+                <td><?php echo $row['staffmember']; ?></td>
+                <td><?php echo $row['reason']; ?></td>
+                <td><?php echo $row['evidence']; ?></td>
+                <td>View / Edit</td>
+            </tr>
+            <?php } ?>
+        </tbody>
+    </table>
 
-    <!-- Profile information -->
-    <div class="container" style="margin-top: 50px;">
-        <div class="card" style="width: 100%; border-radius: 5px !important;">
-            <div class="card-body">
-                <h2 class="card-title text-center">Profile Information</h2>
-                <h5 class="card-subtitle mb-2 text-muted text-center"><?=$_SESSION['name']?></h5>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">Username</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Staff Rank</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th style="font-weight:normal;"><?=$_SESSION['name']?></td>
-                            <th style="font-weight:normal;"><?=$email?></td>
-                            <th style="font-weight:normal;"><?=$_SESSION['stafflevel']?></th>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+    <!-- -->
     </div>
 
     <!-- Import Custom & Bootstrap JS -->

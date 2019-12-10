@@ -10,10 +10,8 @@
     // Connect to database
     include_once 'php/config.php';
 
-    // Variables
-    $sql = $link->prepare("SELECT id, username, steamid, discord, punishment, casesubject, staffmember FROM supportcases");
-
-    $sql->execute();
+    // Get case number
+    $casenumber['casenumber'] = $link->prepare("SHOW TABLE STATUS LIKE 'supportcases'")
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -21,17 +19,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Anarchy Roleplay | Admin</title>
+    <title>Anarchy Roleplay | Staff Panel</title>
     <link rel="shortcut icon" href="lib/img/favicon.png" type="image/x-icon">
 
     <!-- Import Custom & Bootstrap CSS -->
     <link rel="stylesheet" href="css/custom.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 </head>
-<body style="background-image: url(lib/img/bgImg.png); background-repeat: no-repeat; background-attachment: fixed; background-size: cover;">
+<body style="background-color: #ECEEEF; background-repeat: no-repeat; background-attachment: fixed; background-size: cover;">
 
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container">
             <a class="navbar-brand" href="admin.php">
                 <img src="lib/img/logo.png" width="40" height="40" class="d-inline-block align-top" alt="Anarchy Roleplay Logo">
@@ -39,102 +37,256 @@
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="admin.php">Home</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a href="#!" class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Applications
-                        </a>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" href="staffapplications.php">Staff</a>
-                            <a class="dropdown-item" href="developerapplications.php">Developer</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="unbanapplications.php">Unban</a>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a href="whitelist.php" class="nav-link">Whitelist</a>
-                    </li>
                 </ul>
-                <form class="form-inline my-2 my-lg-0" style="margin-right: 20px;">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search for cases.." aria-label="Search">
-                </form>
-                <a href="createcase.php">
-                    <button class="btn btn-danger my-2 my-sm-0 redbtn" style="margin-right: 20px;">Create Case</button>
+                <a href="profile.php" style="color: black; font-weight: 500;">
+                    <?php echo $_SESSION['name']; ?>
                 </a>
-                <a href="profile.php">
-                    <button class="btn btn-danger my-2 my-sm-0 redbtn" style="margin-right: 20px;">Profile</button>
+                <a href="createcase.php">
+                    <button class="btn btn-outline-danger my-2 my-sm-0" style="margin-left: 10px;">Create Case</button>
                 </a>
                 <a href="logout.php">
-                    <button class="btn btn-danger my-2 my-sm-0 redbtn">Log Out</button>
+                    <button class="btn btn-outline-danger my-2 my-sm-0" style="margin-left: 10px;">Logout</button>
                 </a>
             </div>
-        </div>
+        </div>  
     </nav>
 
     <div class="container">
-        <h1 class="text-center text-white" style="margin-top: 50px;">Welcome <?php echo $_SESSION['name']; ?></h1>
+        <div class="content text-center">
+            <h2>Welcome <?php echo $_SESSION['name']; ?></h2>
+            <h5 class="text-muted"><?php echo $_SESSION['stafflevel']; ?></h2>
 
-        <table class="table" style="margin-top: 20px;">
-            <thead class="thead-dark">
-                <tr>
-                    <th width="5">#</th>
-                    <th width="15">Username</th>
-                    <th width="10">Steam ID</th>
-                    <th width="10">Discord</th>
-                    <th width="10">Punishment</th>
-                    <th width="15">Subject</th>
-                    <th width="15">Staff Member(s)</th>
-                    <th width="30"></th>
-                </tr>
-            </thead>
-            <tbody>
-            <?php while($row = $sql->fetch()) : ?>
-                <tr>
-                    <td><?php echo $row['id']; ?></td>
-                    <td><?php echo $row['username']; ?></td>
-                    <td><?php echo $row['steamid']; ?></td>
-                    <td><?php echo $row['discord']; ?></td>
-                    <td><?php echo $row['punishment']; ?></td>
-                    <td><?php echo $row['subject']; ?></td>
-                    <td><?php echo $row['staffs']; ?></td>
-                    <td></td>
-                </tr>
-            <?php endwhile ?>
-            </tbody>
-        </table>
+            <?php
+            $stafflevel = $_SESSION['stafflevel'];
 
-        <table class="table" style="margin-top: 20px;">
-            <thead>
-                <tr>
-                    <th width="5">#</th>
-                    <th width="15">Username</th>
-                    <th width="10">Steam ID</th>
-                    <th width="10">Discord</th>
-                    <th width="10">Punishment</th>
-                    <th width="15">Subject</th>
-                    <th width="15">Staff Member(s)</th>
-                    <th width="30"></th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Use a while loop to make a table row for every DB row -->
-                <?php while($row = $sql->fetch()) : ?>
-                <tr>
-                    <td><?php echo $row['id']; ?></td>
-                    <td><?php echo $row['username']; ?></td>
-                    <td><?php echo $row['steamid']; ?></td>
-                    <td><?php echo $row['discord']; ?></td>
-                    <td><?php echo $row['punishment']; ?></td>
-                    <td><?php echo $row['subject']; ?></td>
-                    <td><?php echo $row['staffs']; ?></td>
-                    <td></td>
-                </tr>
-                <?php endwhile ?>
-            </tbody>
-        </table>
+            switch ($stafflevel) {
+                case "Executive":
+                    echo '<div style="margin-top:25px;">
+                    <div>
+                        <a href="cases.php">
+                            <button class="btn btn-danger" style="width:200px;">Case List</button>
+                        </a>
+                    </div>
+                    <div style="margin-top:10px;">
+                        <button class="btn btn-danger" style="width:200px;" data-toggle="modal" data-target="#createCaseModal">Create Case</button>                    
+                    </div>
+                    <div style="margin-top:10px;">
+                        <a href="whitelist.php">
+                            <button class="btn btn-danger" style="width:200px;">Whitelist</button>
+                        </a>                    
+                    </div>
+                    <div style="margin-top:10px;">
+                        <a href="roaster.php">
+                            <button class="btn btn-danger" style="width:200px;">Roaster</button>
+                        </a>
+                    </div>                 
+                    <div style="margin-top:10px;">
+                        <a href="register.php" style="cursor: not-allowed;">
+                            <button class="btn btn-danger" style="width:200px;cursor: not-allowed;" disabled>Add Staff</button>
+                        </a>
+                    </div>                                                  
+                </div>';
+                break;
+
+                case "Lead Administrator":
+                    echo '            <div style="margin-top:25px;">
+                    <div>
+                        <a href="cases.php">
+                            <button class="btn btn-danger" style="width:200px;">Case List</button>
+                        </a>
+                    </div>
+                    <div style="margin-top:10px;">
+                        <button class="btn btn-danger" style="width:200px;" data-toggle="modal" data-target="#createCaseModal">Create Case</button>                    
+                    </div>
+                    <div style="margin-top:10px;">
+                        <a href="whitelist.php">
+                            <button class="btn btn-danger" style="width:200px;">Whitelist</button>
+                        </a>                    
+                    </div>
+                    <div style="margin-top:10px;">
+                        <a href="roaster.php">
+                            <button class="btn btn-danger" style="width:200px;">Roaster</button>
+                        </a>
+                    </div>                 
+                    <div style="margin-top:10px;">
+                        <a href="register.php" style="cursor: not-allowed;">
+                            <button class="btn btn-danger" style="width:200px;cursor: not-allowed;" disabled>Add Staff</button>
+                        </a>
+                    </div>                                                  
+                </div>';
+                break;
+                case "Senior Administrator":
+                    echo '            <div style="margin-top:25px;">
+                    <div>
+                        <a href="cases.php">
+                            <button class="btn btn-danger" style="width:200px;">Case List</button>
+                        </a>
+                    </div>
+                    <div style="margin-top:10px;">
+                        <button class="btn btn-danger" style="width:200px;" data-toggle="modal" data-target="#createCaseModal">Create Case</button>                    
+                    </div>
+                    <div style="margin-top:10px;">
+                        <a href="whitelist.php">
+                            <button class="btn btn-danger" style="width:200px;">Whitelist</button>
+                        </a>                    
+                    </div>
+                    <div style="margin-top:10px;">
+                        <a href="roaster.php">
+                            <button class="btn btn-danger" style="width:200px;">Roaster</button>
+                        </a>
+                    </div>                                                                   
+                </div>';
+                break;
+                case "Administrator":
+                    echo '            <div style="margin-top:25px;">
+                    <div>
+                        <a href="cases.php">
+                            <button class="btn btn-danger" style="width:200px;">Case List</button>
+                        </a>
+                    </div>
+                    <div style="margin-top:10px;">
+                        <button class="btn btn-danger" style="width:200px;" data-toggle="modal" data-target="#createCaseModal">Create Case</button>                    
+                    </div>
+                    <div style="margin-top:10px;">
+                        <a href="whitelist.php">
+                            <button class="btn btn-danger" style="width:200px;">Whitelist</button>
+                        </a>                    
+                    </div>
+                    <div style="margin-top:10px;">
+                        <a href="roaster.php">
+                            <button class="btn btn-danger" style="width:200px;">Roaster</button>
+                        </a>
+                    </div>                                                                  
+                </div>';
+                break;
+                case "Senior Moderator":
+                    echo '            <div style="margin-top:25px;">
+                    <div>
+                        <a href="cases.php">
+                            <button class="btn btn-danger" style="width:200px;">Case List</button>
+                        </a>
+                    </div>
+                    <div style="margin-top:10px;">
+                        <button class="btn btn-danger" style="width:200px;" data-toggle="modal" data-target="#createCaseModal">Create Case</button>                    
+                    </div>
+                    <div style="margin-top:10px;">
+                        <a href="whitelist.php">
+                            <button class="btn btn-danger" style="width:200px;">Whitelist</button>
+                        </a>                    
+                    </div>
+                    <div style="margin-top:10px;">
+                        <a href="roaster.php">
+                            <button class="btn btn-danger" style="width:200px;">Roaster</button>
+                        </a>
+                    </div>                                                                  
+                </div>';
+                break;
+                case "Moderator":
+                    echo '            <div style="margin-top:25px;">
+                    <div>
+                        <a href="cases.php">
+                            <button class="btn btn-danger" style="width:200px;">Case List</button>
+                        </a>
+                    </div>
+                    <div style="margin-top:10px;">
+                        <button class="btn btn-danger" style="width:200px;" data-toggle="modal" data-target="#createCaseModal">Create Case</button>                    
+                    </div>
+                    <div style="margin-top:10px;">
+                        <a href="roaster.php">
+                            <button class="btn btn-danger" style="width:200px;">Roaster</button>
+                        </a>
+                    </div>                                                                  
+                </div>';
+                case "Junior Moderator":
+                    echo '            <div style="margin-top:25px;">
+                    <div>
+                        <a href="cases.php">
+                            <button class="btn btn-danger" style="width:200px;">Case List</button>
+                        </a>
+                    </div>
+                    <div style="margin-top:10px;">
+                        <button class="btn btn-danger" style="width:200px;" data-toggle="modal" data-target="#createCaseModal">Create Case</button>                    
+                    </div>
+                    <div style="margin-top:10px;">
+                        <a href="roaster.php">
+                            <button class="btn btn-danger" style="width:200px;">Roaster</button>
+                        </a>
+                    </div>                                                                  
+                </div>';
+                break;
+                case "":
+                    echo '<h3 class="text-center">An error has been detected. Please contact an developer.</h3> <p class="text-muted">ERROR CODE: NO_RNK</p>';
+                break;
+            }
+            ?>
+        </div>
     </div>
+
+    <!-- MODAL STRUCTURES -->
+
+    <!-- Create Case -->
+    <div class="modal fade" id="createCaseModal" tabindex="-1" role="dialog" aria-labelledby="createCaseModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createCaseModalLabel">Create Case</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <form action="casesent.php" method="POST">
+                        <div class="form-group">
+                            <label for="caseId">Case Number</label>
+                            <input class="form-control" type="text" placeholder="NUMMER" style="width: 75px;" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input class="form-control" type="text" placeholder="Tweek" name="username" id="username">
+                        </div>
+                        <div class="form-group">
+                            <label for="steamid">Steam ID</label>
+                            <input class="form-control" type="text" placeholder="STEAM:100938475" name="steamid" id="steamid">
+                        </div>
+                        <div class="form-group">
+                            <label for="discord">Discord</label>
+                            <input class="form-control" type="text" placeholder="ZHAG#1234" name="discord" id="discord">
+                        </div>
+                        <div class="form-group">
+                            <label for="punishment">Punishment</label>
+                            <select class="form-control form-control-sm" name="punishment" id="punishment">
+                                <option readonly>Select one of the punishments</option>
+                                <option>Verbale Warning</option>
+                                <option>Written Warning</option>
+                                <option>Kick</option>
+                                <option>Tempoary Ban</option>
+                                <option>Permament Ban</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <input class="form-control" type="text" placeholder="OOC Talking" name="subject" id="subject">
+                        </div>
+                        <div class="form-group">
+                            <label for="reason">Reason behind the punishment</label>
+                            <textarea class="form-control" rows="3" name="reason" id="reason"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="evidence">Evidence</label>
+                            <input type="file" name="evidence" id="evidence">
+                        </div>
+
+                        <input type="submit" class="btn btn-danger" id="createcase" name="createcase">
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+            </div>
+        </div>
+    </div>    
 
     <!-- Import Custom & Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>

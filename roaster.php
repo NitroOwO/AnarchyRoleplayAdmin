@@ -6,17 +6,12 @@
         header('location: index.php');
         exit();
     }
+
     // Connect to database
     include_once 'php/config.php';
 
-    // Store password and email in session
-    $stmt = $link->prepare('SELECT password, email FROM staffaccounts WHERE id = ?');
-    // Get account info from ID
-    $stmt->bind_param('i', $_SESSION['id']);
-    $stmt->execute();
-    $stmt->bind_result($password, $email);
-    $stmt->fetch();
-    $stmt->close();
+    // Get case number
+    $casenumber['casenumber'] = $link->prepare("SHOW TABLE STATUS LIKE 'supportcases'")
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -24,14 +19,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Anarchy Roleplay | Admin</title>
+    <title>Anarchy Roleplay | Staff Roaster</title>
     <link rel="shortcut icon" href="lib/img/favicon.png" type="image/x-icon">
 
     <!-- Import Custom & Bootstrap CSS -->
     <link rel="stylesheet" href="css/custom.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 </head>
-<body style="background-color: #ECEEEF; background-repeat: no-repeat; background-attachment: fixed; background-size: cover;" class="loggedin">
+<body style="background-color: #ECEEEF; background-repeat: no-repeat; background-attachment: fixed; background-size: cover;">
 
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light">
@@ -56,30 +51,8 @@
         </div>  
     </nav>
 
-    <!-- Profile information -->
-    <div class="container" style="margin-top: 50px;">
-        <div class="card" style="width: 100%; border-radius: 5px !important;">
-            <div class="card-body">
-                <h2 class="card-title text-center">Profile Information</h2>
-                <h5 class="card-subtitle mb-2 text-muted text-center"><?=$_SESSION['name']?></h5>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">Username</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Staff Rank</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th style="font-weight:normal;"><?=$_SESSION['name']?></td>
-                            <th style="font-weight:normal;"><?=$email?></td>
-                            <th style="font-weight:normal;"><?=$_SESSION['stafflevel']?></th>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+    <div class="text-center">
+    <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQxibt1E7e2A8BsplskCTTau_0sUVeBrh6l_lrBtf_Bm-YoEYJdQ5pC9dAzmdlHxLFY0u08pXKiPVZU/pubhtml?gid=1271751826&amp;single=true&amp;widget=true&amp;headers=false" height="700px" width="71.28%"></iframe>
     </div>
 
     <!-- Import Custom & Bootstrap JS -->
