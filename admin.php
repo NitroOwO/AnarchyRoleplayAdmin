@@ -9,9 +9,6 @@
 
     // Connect to database
     include_once 'php/config.php';
-
-    // Get case number
-    $casenumber['casenumber'] = $link->prepare("SHOW TABLE STATUS LIKE 'supportcases'")
 ?>
 <!DOCTYPE html>
 <html lang="en">
