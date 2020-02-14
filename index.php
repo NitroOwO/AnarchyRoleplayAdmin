@@ -14,6 +14,7 @@
 <body>
     
     <div class="content">
+        <!-- Form and logo -->
         <img src="lib/img/logo.png" class="text-center centerImg" height="150" width="150">
         <h3 class="text-center" style="margin-bottom: 25px; margin-top: 50px;">Anarchy Roleplay | Staff Login</h3>
         <form action="authenticate.php" method="POST">
