@@ -2,8 +2,8 @@
     // Database Variables - DONT TOUCH
     $dbServer = "localhost";
     $dbUser = "root";
-    $dbPswd = "9500Hobro";
-    $dbName = "anarchyrp";
+    $dbPswd = "";
+    $dbName = "login";
 
     // Create connection to the database
     $link = mysqli_connect($dbServer, $dbUser, $dbPswd, $dbName);
